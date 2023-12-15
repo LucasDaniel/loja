@@ -8,7 +8,7 @@ No BackEnd:
 - Instale o node js versão mais atual
 - Instale as dependencias necessarias do nestjs
   * npm i
-- Adicione o seguinte .env
+- Adicione o seguinte .env na pasta backend
   * DB_HOST=127.0.0.1
   * DB_PORT=3306
   * DB_USERNAME=root
