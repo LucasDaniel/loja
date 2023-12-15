@@ -9,11 +9,11 @@ No BackEnd:
 - Instale as dependencias necessarias do nestjs
   * npm i
 - Adicione o seguinte .env
-  DB_HOST=127.0.0.1
-  DB_PORT=3306
-  DB_USERNAME=root
-  DB_PASSWORD=root
-  DB_NAME=db_loja
+  * DB_HOST=127.0.0.1
+  * DB_PORT=3306
+  * DB_USERNAME=root
+  * DB_PASSWORD=root
+  * DB_NAME=db_loja
 - Rode a aplicação pelo "npm run start:dev"
 
 No FrontEnd:
