@@ -8,6 +8,9 @@ No BackEnd:
 - Instale o node js versão mais atual
 - Instale as dependencias necessarias do nestjs
   * npm i
-- Rode a aplicação pelo npm run start:dev
+- Rode a aplicação pelo "npm run start:dev"
 
 No FrontEnd:
+- Instale as dependencias necessarias do angular
+- Rode a aplicação pelo "ng serve --open"
+- Acesse o front end pelo http://localhost:4200
