@@ -14,12 +14,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
 import { FormularioComponent } from './components/formulario/formulario.component';
 import { MatCardModule } from '@angular/material/card';
+import { ModalMessageComponent } from './components/modal-message/modal-message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FormularioComponent,
+    ModalMessageComponent,
   ],
   imports: [
     BrowserModule,
