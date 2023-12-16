@@ -1,1 +1,14 @@
-<p>modal-message works!</p>
+<div [@popOverState]="stateName">
+    <div [ngClass]="feedback == 'error' ? 'c-error' : 'c-success'">
+        <div *ngIf="feedback == 'error'" class="div-mat-icon"><mat-icon class="class-mat-icon c-red">error</mat-icon></div>
+        <div *ngIf="feedback == 'success'" class="div-mat-icon"><mat-icon class="class-mat-icon c-green">check</mat-icon></div>
+        <h1 mat-dialog-title>{{titulo}}</h1>
+        <div mat-dialog-content>{{descricao}}</div>
+        <div mat-dialog-actions>
+            <button mat-raised-button color="primary" mat-dialog-close>Fechar</button>
+        </div>
+    </div>
+</div>
+
+
+

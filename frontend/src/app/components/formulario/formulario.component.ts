@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Pacote } from 'src/app/model/pacote.model';
 import { Servico } from 'src/app/model/servico.model';
 import { User } from 'src/app/model/user.model';
-import { UserId } from 'src/app/model/userid.model';
 import { UsuarioPacote } from 'src/app/model/usuario-pacote.model';
 import { UsuarioServico } from 'src/app/model/usuario-servico.model';
 import { CoberturaService } from 'src/app/services/cobertura/cobertura.service';
@@ -11,6 +11,7 @@ import { ServicoService } from 'src/app/services/servico/servico.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UsuarioPacoteService } from 'src/app/services/usuario-pacote/usuario-pacote.service';
 import { UsuarioServicoService } from 'src/app/services/usuario-servico/usuario-servico.service';
+import { ModalMessageComponent } from '../modal-message/modal-message.component';
 
 @Component({
   selector: 'app-formulario',
@@ -37,7 +38,8 @@ export class FormularioComponent implements OnInit {
     private serviceServico: ServicoService,
     private serviceUser: UserService,
     private serviceUsuarioServico: UsuarioServicoService,
-    private serviceUsuarioPacote: UsuarioPacoteService
+    private serviceUsuarioPacote: UsuarioPacoteService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -65,9 +67,10 @@ export class FormularioComponent implements OnInit {
 
   verificaCEP() {
     if(this.cepsDisponiveis.indexOf(this.cep) !== -1) {
+      this.openModalMessage("Disponível","Esse CEP esta disponível para nossa super promoção!","success");
       this.proximoPasso();
     } else {
-      alert("CEP "+this.cep+" não disponivel");
+      this.openModalMessage("Não disponível","CEP "+this.cep+" não disponivel para a super promoção!","error");
     }
   }
 
@@ -145,5 +148,10 @@ export class FormularioComponent implements OnInit {
       this.step++;
     }
   }
+
+  openModalMessage(titulo:string,descricao:string,feedback:string) {
+    this.dialog.open(ModalMessageComponent,{data:{titulo:titulo,descricao:descricao,feedback:feedback}});
+  }
+  
 }
 

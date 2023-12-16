@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { FormularioComponent } from './components/formulario/formulario.component';
 import { MatCardModule } from '@angular/material/card';
 import { ModalMessageComponent } from './components/modal-message/modal-message.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { ModalMessageComponent } from './components/modal-message/modal-message.
     MatButtonModule,
     MatDividerModule,
     FormsModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
