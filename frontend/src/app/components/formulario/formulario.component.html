@@ -1,35 +1,97 @@
+<div class="div-steps">
+    <button class="bt-steps" (click)="irParaEtapa(1)">
+        <div *ngIf="stepModal == 1" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="primary">done</mat-icon>
+        </div>
+        <div *ngIf="stepModal > 1" class="div-mat-icon">
+            <mat-icon class="class-mat-icon c-green">done_all</mat-icon>
+        </div>
+        1ª Etapa
+    </button>
+    /
+    <button class="bt-steps" (click)="irParaEtapa(2)" [disabled]="stepModal<2">
+        <div *ngIf="stepModal < 2" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="warn">highlight_off</mat-icon>
+        </div>
+        <div *ngIf="stepModal == 2" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="primary">done</mat-icon>
+        </div>
+        <div *ngIf="stepModal > 2" class="div-mat-icon">
+            <mat-icon class="class-mat-icon c-green">done_all</mat-icon>
+        </div>
+        2ª Etapa
+    </button>
+    /
+    <button class="bt-steps" (click)="irParaEtapa(3)" [disabled]="stepModal<3">
+        <div *ngIf="stepModal < 3" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="warn">highlight_off</mat-icon>
+        </div>
+        <div *ngIf="stepModal == 3" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="primary">done</mat-icon>
+        </div>
+        <div *ngIf="stepModal > 3" class="div-mat-icon">
+            <mat-icon class="class-mat-icon c-green">done_all</mat-icon>
+        </div>
+        3ª Etapa
+    </button>
+    /
+    <button class="bt-steps" (click)="irParaEtapa(4)" [disabled]="stepModal<4">
+        <div *ngIf="stepModal < 4" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="warn">highlight_off</mat-icon>
+        </div>
+        <div *ngIf="stepModal == 4" class="div-mat-icon">
+            <mat-icon class="class-mat-icon" color="primary">done</mat-icon>
+        </div>
+        <div *ngIf="stepModal > 4" class="div-mat-icon">
+            <mat-icon class="class-mat-icon c-green">done_all</mat-icon>
+        </div>
+        Resumo
+    </button>
+</div>
 <mat-toolbar>
     <div class="background">
         <div class="step" *ngIf="step === 1">
-            <mat-form-field>
+            <div class="title-step">
+                <h4>1ª Etapa</h4>
+                <p class="card-text">Verificação de CEP!</p>
+            </div>
+            <mat-form-field class="w-95-p">
                 <mat-label>CEP</mat-label>
                 <input mask="00000-000" matInput [(ngModel)]="cep">
             </mat-form-field>
             <mat-divider></mat-divider>
-            <button mat-raised-button color="primary" (click)="verificaCEP()" [disabled]="this.cep.length < 8">Verificar CEP</button>
+            <button class="w-95-p" mat-raised-button color="primary" (click)="verificaCEP()" [disabled]="this.cep.length < 8">Verificar CEP</button>
         </div>
         <div class="step" *ngIf="step === 2">
+            <div class="title-step">
+                <h4>2ª Etapa</h4>
+                <p>Escolha o plano!</p>
+            </div>
             <div class="card-wrapper">
                 <mat-card *ngFor="let item of planosDisponiveis">
-                    <mat-card-header>
-                        <mat-card-title>{{item.nome + " | " + item.velocidade}}</mat-card-title>
+                    <mat-card-header [ngClass]="{'c-back-green' : planoEscolhido !== undefined && planoEscolhido.id === item.id}">
+                        <mat-card-title>{{item.nome}}</mat-card-title>
+                        <mat-card-subtitle>{{item.velocidade}}</mat-card-subtitle>
                         <mat-card-subtitle>R$ {{item.valor}} mensais</mat-card-subtitle>
                     </mat-card-header>
-                    <mat-card-actions>
+                    <mat-card-actions [ngClass]="{'c-back-green' : planoEscolhido !== undefined && planoEscolhido.id === item.id}">
                         <button mat-raised-button *ngIf="planoEscolhido === undefined" (click)="queroEssePlano(item)" color="primary">Quero esse!</button>
                         <button mat-raised-button *ngIf="planoEscolhido !== undefined && planoEscolhido.id !== item.id" (click)="queroEssePlano(item)" color="primary">Quero esse!</button>
                         <button mat-raised-button *ngIf="planoEscolhido !== undefined && planoEscolhido.id === item.id" (click)="cancelaEscolhaPlano()" color="warn">Cancelar</button>
                     </mat-card-actions>
                 </mat-card>
             </div>
-            <mat-divider></mat-divider>
+            <div class="title-step">
+                <h4>Pacotes</h4>
+                <p>Escolha os pacotes!</p>
+            </div>
             <div class="card-wrapper">
                 <mat-card *ngFor="let item of pacotesDisponiveis">
-                    <mat-card-header>
+                    <mat-card-header [ngClass]="{'c-back-green' : pacoteEscolhido !== undefined && pacoteEscolhido.id === item.id}">
                         <mat-card-title>{{item.nome}}</mat-card-title>
                         <mat-card-subtitle>R$ {{item.valor}} mensais</mat-card-subtitle>
                     </mat-card-header>
-                    <mat-card-actions>
+                    <mat-card-actions [ngClass]="{'c-back-green' : pacoteEscolhido !== undefined && pacoteEscolhido.id === item.id}">
                         <button mat-raised-button *ngIf="pacoteEscolhido === undefined" (click)="queroEssePacote(item)" color="primary">Quero esse!</button>
                         <button mat-raised-button *ngIf="pacoteEscolhido !== undefined && pacoteEscolhido.id !== item.id" (click)="queroEssePacote(item)" color="primary">Quero esse!</button>
                         <button mat-raised-button *ngIf="pacoteEscolhido !== undefined && pacoteEscolhido.id === item.id" (click)="cancelaEscolhaPacote()" color="warn">Cancelar</button>
@@ -37,51 +99,318 @@
                 </mat-card>
             </div>
             <mat-divider></mat-divider>
-            <button mat-raised-button color="primary" (click)="escolheuPlanosPacotes()">Fazer Cadastro</button>
+            <button class="w-95-p" mat-raised-button color="primary" (click)="escolheuPlanosPacotes()">Fazer Cadastro</button>
         </div>
         <div class="step" *ngIf="step === 3">
-            <mat-form-field class="input-step">
-                <mat-label>Nome</mat-label>
-                <input matInput [(ngModel)]="nome">
-            </mat-form-field>
-            <mat-form-field class="input-step">
-                <mat-label>Email</mat-label>
-                <input matInput [(ngModel)]="email">
-            </mat-form-field>
+            <div class="title-step">
+                <h4>3ª Etapa</h4>
+                <p>Coloque seus dados pessoais</p>
+            </div>
+            <form [formGroup]="formUsuario" novalidate>
+                <div class="d-flex">
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Nome</mat-label>
+                        <input matInput formControlName="nome" required>
+                        <div *ngIf="formUsuario.controls['nome'].invalid && (formUsuario.controls['nome'].dirty || formUsuario.controls['nome'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['nome'].errors !== null && formUsuario.controls['nome'].errors['required']">
+                                Name não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['nome'].errors !== null && formUsuario.controls['nome'].status == 'INVALID'">
+                                Name é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-25">
+                        <mat-label>CPF</mat-label>
+                        <input mask="000.000.000-00" matInput formControlName="cpf" required>
+                        <div *ngIf="formUsuario.controls['cpf'].invalid && (formUsuario.controls['cpf'].dirty || formUsuario.controls['cpf'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['cpf'].errors !== null && formUsuario.controls['cpf'].errors['required']">
+                                CPF não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['cpf'].errors !== null && formUsuario.controls['cpf'].status == 'INVALID'">
+                                CPF é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-25">
+                        <mat-label>RG</mat-label>
+                        <input mask="00.000.000" matInput formControlName="rg" required>
+                        <div *ngIf="formUsuario.controls['rg'].invalid && (formUsuario.controls['rg'].dirty || formUsuario.controls['rg'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['rg'].errors !== null && formUsuario.controls['rg'].errors['required']">
+                                RG não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['rg'].errors !== null && formUsuario.controls['rg'].status == 'INVALID'">
+                                RG é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Data de nascimento</mat-label>
+                        <input mask="00/00/0000" matInput formControlName="data_nascimento" required>
+                        <div *ngIf="formUsuario.controls['data_nascimento'].invalid && (formUsuario.controls['data_nascimento'].dirty || formUsuario.controls['data_nascimento'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['data_nascimento'].errors !== null && formUsuario.controls['data_nascimento'].errors['required']">
+                                Data de nascimento não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['data_nascimento'].errors !== null && formUsuario.controls['data_nascimento'].status == 'INVALID'">
+                                Data de nascimento é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Telefone</mat-label>
+                        <input mask="(00) 0 0000-0000" matInput formControlName="telefone" required>
+                        <div *ngIf="formUsuario.controls['telefone'].invalid && (formUsuario.controls['telefone'].dirty || formUsuario.controls['telefone'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['telefone'].errors !== null && formUsuario.controls['telefone'].errors['required']">
+                                Telefone não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['telefone'].errors !== null && formUsuario.controls['telefone'].status == 'INVALID'">
+                                Telefone é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Telefone secundario</mat-label>
+                        <input mask="(00) 0 0000-0000" matInput formControlName="telefone_secundario">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" required>
+                        <div *ngIf="formUsuario.controls['email'].invalid && (formUsuario.controls['email'].dirty || formUsuario.controls['email'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['email'].errors !== null && formUsuario.controls['email'].errors['required']">
+                                Email não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['email'].errors !== null && formUsuario.controls['email'].status == 'INVALID'">
+                                Email é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="title-step">
+                    <h4>Agora</h4>
+                    <p>O endereço para a instalação</p>
+                </div>
+                <div class="d-flex">
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Endereço</mat-label>
+                        <input matInput formControlName="endereco" required>
+                        <div *ngIf="formUsuario.controls['endereco'].invalid && (formUsuario.controls['endereco'].dirty || formUsuario.controls['endereco'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['endereco'].errors !== null && formUsuario.controls['endereco'].errors['required']">
+                                Endereço não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['endereco'].errors !== null && formUsuario.controls['endereco'].status == 'INVALID'">
+                                Endereço é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Bairro</mat-label>
+                        <input matInput formControlName="bairro" required>
+                        <div *ngIf="formUsuario.controls['bairro'].invalid && (formUsuario.controls['bairro'].dirty || formUsuario.controls['bairro'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['bairro'].errors !== null && formUsuario.controls['bairro'].errors['required']">
+                                Bairro não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['bairro'].errors !== null && formUsuario.controls['bairro'].status == 'INVALID'">
+                                Bairro é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Numero</mat-label>
+                        <input matInput formControlName="numero" required>
+                        <div *ngIf="formUsuario.controls['numero'].invalid && (formUsuario.controls['numero'].dirty || formUsuario.controls['numero'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['numero'].errors !== null && formUsuario.controls['numero'].errors['required']">
+                                Numero não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['numero'].errors !== null && formUsuario.controls['numero'].status == 'INVALID'">
+                                Numero é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Complemento</mat-label>
+                        <input matInput formControlName="complemento">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Referencia</mat-label>
+                        <input matInput formControlName="referencia">
+                    </mat-form-field>
+                </div>
+                <div class="title-step">
+                    <h4>Para finalizar</h4>
+                    <p>Alguns dados adicionais</p>
+                </div>
+                <div class="d-flex">
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Nome do pai</mat-label>
+                        <input matInput formControlName="nome_pai">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Nome da mãe</mat-label>
+                        <input matInput formControlName="nome_mae">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Estado civil</mat-label>
+                        <input matInput formControlName="estado_civil">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Gênero</mat-label>
+                        <input matInput formControlName="genero">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Nacionalidade</mat-label>
+                        <input matInput formControlName="nacionalidade">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Profissão</mat-label>
+                        <input matInput formControlName="profissao">
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Vendedor</mat-label>
+                        <input matInput formControlName="vendedor" required>
+                        <div *ngIf="formUsuario.controls['vendedor'].invalid && (formUsuario.controls['vendedor'].dirty || formUsuario.controls['vendedor'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['vendedor'].errors !== null && formUsuario.controls['vendedor'].errors['required']">
+                                Vendedor não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['vendedor'].errors !== null && formUsuario.controls['vendedor'].status == 'INVALID'">
+                                Vendedor é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Dia do vencimento</mat-label>
+                        <input matInput formControlName="dia_vencimento" required>
+                        <div *ngIf="formUsuario.controls['dia_vencimento'].invalid && (formUsuario.controls['dia_vencimento'].dirty || formUsuario.controls['dia_vencimento'].touched)" class="alert alert-danger">
+                            <div *ngIf="formUsuario.controls['dia_vencimento'].errors !== null && formUsuario.controls['dia_vencimento'].errors['required']">
+                                Dia de vencimento não esta preenchido
+                            </div>
+                            <div *ngIf="formUsuario.controls['dia_vencimento'].errors !== null && formUsuario.controls['dia_vencimento'].status == 'INVALID'">
+                                Dia de vencimento é inválido
+                            </div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-100">
+                        <mat-label>Observação</mat-label>
+                        <input matInput formControlName="observacao">
+                    </mat-form-field>
+                </div>
+            </form>
             <mat-divider></mat-divider>
-            <button mat-raised-button color="primary" (click)="resumoDaCompra()">Ver resumo da compra</button>
+            <button class="w-95-p" mat-raised-button color="primary" (click)="resumoDaCompra()" [disabled]="!formUsuario.valid">Ver resumo da compra</button>
         </div>
         <div class="step" *ngIf="step === 4">
-            <mat-form-field class="input-step">
-                <mat-label>Nome</mat-label>
-                <input matInput [(ngModel)]="nome" disabled>
-            </mat-form-field>
-            <mat-form-field class="input-step">
-                <mat-label>Email</mat-label>
-                <input matInput [(ngModel)]="email" disabled>
-            </mat-form-field>
-            <mat-form-field class="input-step">
-                <mat-label>CEP</mat-label>
-                <input matInput [(ngModel)]="cep" disabled>
-            </mat-form-field>
+            <div class="title-step">
+                <h4>Só verificar os dados</h4>
+            </div>
+            <form [formGroup]="formUsuario" novalidate>
+                <div class="d-flex">
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Nome</mat-label>
+                        <input matInput formControlName="nome" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-25">
+                        <mat-label>CPF</mat-label>
+                        <input mask="000.000.000-00" matInput formControlName="cpf" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-25">
+                        <mat-label>RG</mat-label>
+                        <input mask="00.000.000" matInput formControlName="rg" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Data de nascimento</mat-label>
+                        <input mask="00/00/0000" matInput formControlName="data_nascimento" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Telefone</mat-label>
+                        <input mask="(00) 0 0000-0000" matInput formControlName="telefone" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Telefone secundario</mat-label>
+                        <input mask="(00) 0 0000-0000" matInput formControlName="telefone_secundario" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="d-flex">
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Endereço</mat-label>
+                        <input matInput formControlName="endereco" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Bairro</mat-label>
+                        <input matInput formControlName="bairro" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Numero</mat-label>
+                        <input matInput formControlName="numero" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Complemento</mat-label>
+                        <input matInput formControlName="complemento" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Referencia</mat-label>
+                        <input matInput formControlName="referencia" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="d-flex">
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Nome do pai</mat-label>
+                        <input matInput formControlName="nome_pai" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Nome da mãe</mat-label>
+                        <input matInput formControlName="nome_mae" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Estado civil</mat-label>
+                        <input matInput formControlName="estado_civil" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Gênero</mat-label>
+                        <input matInput formControlName="genero" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Nacionalidade</mat-label>
+                        <input matInput formControlName="nacionalidade" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-33">
+                        <mat-label>Profissão</mat-label>
+                        <input matInput formControlName="profissao" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Vendedor</mat-label>
+                        <input matInput formControlName="vendedor" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-50">
+                        <mat-label>Dia do vencimento</mat-label>
+                        <input matInput formControlName="dia_vencimento" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="cadastro-100">
+                        <mat-label>Observação</mat-label>
+                        <input matInput formControlName="observacao" readonly>
+                    </mat-form-field>
+                </div>
+            </form>
             <mat-divider></mat-divider>
             <div class="card-wrapper-fim">
                 <mat-card *ngIf="planoEscolhido !== undefined">
-                    <mat-card-header>
-                        <mat-card-title>{{planoEscolhido.nome + " | " + planoEscolhido.velocidade}}</mat-card-title>
+                    <mat-card-header class="c-back-green">
+                        <mat-card-title>{{planoEscolhido.nome}}</mat-card-title>
+                        <mat-card-subtitle>{{planoEscolhido.velocidade}}</mat-card-subtitle>
                         <mat-card-subtitle>R$ {{planoEscolhido.valor}} mensais</mat-card-subtitle>
                     </mat-card-header>
                 </mat-card>
             </div>
             <div class="card-wrapper-fim">
                 <mat-card *ngIf="pacoteEscolhido !== undefined">
-                    <mat-card-header>
+                    <mat-card-header class="c-back-green">
                         <mat-card-title>{{pacoteEscolhido.nome}}</mat-card-title>
                         <mat-card-subtitle>R$ {{pacoteEscolhido.valor}} mensais</mat-card-subtitle>
                     </mat-card-header>
                 </mat-card>
             </div>
-            <mat-divider></mat-divider>
             <div class="card-wrapper-fim">
                 <mat-card *ngIf="planoEscolhido !== undefined && pacoteEscolhido === undefined">
                     <mat-card-header>
@@ -97,7 +426,7 @@
                 </mat-card>
             </div>
             <mat-divider></mat-divider>
-            <button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
+            <button class="w-95-p" mat-raised-button color="primary" (click)="salvar()">Salvar</button>
         </div>
     </div>
 </mat-toolbar>

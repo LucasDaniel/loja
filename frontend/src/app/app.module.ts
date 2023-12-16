@@ -18,6 +18,7 @@ import { ModalMessageComponent } from './components/modal-message/modal-message.
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     MatCardModule,
     MatDialogModule,
     MatIconModule,
-    NgxMaskDirective
+    NgxMaskDirective,
+    ReactiveFormsModule
   ],
   providers: [provideNgxMask({ /* opções de cfg */ })],
   bootstrap: [AppComponent]

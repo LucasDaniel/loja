@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { UsuarioPacoteService } from 'src/app/services/usuario-pacote/usuario-pacote.service';
 import { UsuarioServicoService } from 'src/app/services/usuario-servico/usuario-servico.service';
 import { ModalMessageComponent } from '../modal-message/modal-message.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-formulario',
@@ -20,14 +21,94 @@ import { ModalMessageComponent } from '../modal-message/modal-message.component'
 })
 export class FormularioComponent implements OnInit {
 
-  public cep = '';
+  public cep = '32010770';
   public planoEscolhido:Servico | undefined;
   public pacoteEscolhido:Pacote | undefined;
-  public nome = 'aaa';
+  public noome = 'aaa';
   public email = 'aaa@email.com';
-  public step = 1;
+  public step = 4;
+  public stepModal = 4;
   public planosDisponiveis:Servico[] = [];
   public pacotesDisponiveis:Pacote[] = [];
+  public formUsuario: FormGroup = this.fb.group({
+    nome: ['Lucas', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(3)
+      ], 
+    }],
+    cpf: ['08292649654', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(11)
+      ], 
+    }],
+    rg: ['15312075', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(8)
+      ], 
+    }],
+    data_nascimento: ['16061989', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(8)
+      ], 
+    }],
+    telefone: ['31993675492', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(11)
+      ], 
+    }],
+    telefone_secundario: [''],
+    email: ['lucas@email.com', {
+      Validators:[
+        Validators.required,
+        Validators.email
+      ], 
+    }],
+    endereco: ['Rua B', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(5)
+      ], 
+    }],
+    bairro: ['Campo Alto', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(2)
+      ], 
+    }],
+    numero: ['228', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(1)
+      ], 
+    }],
+    complemento: [''],
+    referencia: [''],
+    nome_pai: [''],
+    nome_mae: [''],
+    estado_civil: [''],
+    genero: [''],
+    nacionalidade: [''],
+    profissao: [''],
+    vendedor: ['Rafael', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(3)
+      ], 
+    }],
+    dia_vencimento: ['05', {
+      Validators:[
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(2)
+      ], 
+    }],
+    observacao:  ['Teste obs'],
+ });
 
   private user!: User;
   private cepsDisponiveis:string[] = [];
@@ -39,9 +120,10 @@ export class FormularioComponent implements OnInit {
     private serviceUser: UserService,
     private serviceUsuarioServico: UsuarioServicoService,
     private serviceUsuarioPacote: UsuarioPacoteService,
+    private fb: FormBuilder,
     public dialog: MatDialog
-  ) {}
-
+  ) {
+  }
   ngOnInit(): void {
     this.serviceCobertura.get()
       .subscribe(
@@ -67,10 +149,10 @@ export class FormularioComponent implements OnInit {
 
   verificaCEP() {
     if(this.cepsDisponiveis.indexOf(this.formatCEP()) !== -1) {
-      this.openModalMessage("Disponível","Esse CEP esta disponível para nossa super promoção!","success");
+      if(this.stepModal == 1) this.openModalMessage("Disponível","Esse CEP esta disponível para nossa super promoção!","success");
       this.proximoPasso();
     } else {
-      this.openModalMessage("Não disponível","CEP "+this.formatCEP()+" não disponivel para a super promoção!","error");
+      if(this.stepModal == 1) this.openModalMessage("Não disponível","CEP "+this.formatCEP()+" não disponivel para a super promoção!","error");
     }
   }
 
@@ -104,8 +186,8 @@ export class FormularioComponent implements OnInit {
   }
 
   salvar() {
-    if (this.nome != '' && this.email != '')
-    this.user = new User(this.nome,this.email,this.formatCEP());
+    if (this.noome != '' && this.email != '')
+    this.user = new User(this.noome,this.email,this.formatCEP());
     this.serviceUser.create(this.user)
     .subscribe(
       resposta => {
@@ -131,7 +213,6 @@ export class FormularioComponent implements OnInit {
         }
       }
     );
-    this.step = 1;
     this.reiniciaDados();
   }
 
@@ -139,22 +220,34 @@ export class FormularioComponent implements OnInit {
     this.cep = '32010-770';
     this.planoEscolhido = undefined;
     this.pacoteEscolhido = undefined;
-    this.nome = 'aaa';
+    this.noome = 'aaa';
     this.email = 'aaa@email.com';
     this.step = 1;
+    this.stepModal = 1;
   }
 
   proximoPasso() {
     if (this.step == 2) {
-      if (this.planoEscolhido !== undefined) this.step++;
-      else this.openModalMessage("Escolha um plano","Escolha pelo menos um plano antes de continuar.","error");
+      if (this.planoEscolhido !== undefined) {
+        if(this.stepModal == 2) this.openModalMessage("Coloque seus dados","Preencha o formulario com seus dados, quanto mais dados, melhor.","success");
+        if (this.stepModal == this.step) this.step++;
+        if (this.stepModal < 3)this.stepModal++;
+      } else if(this.stepModal == 2) this.openModalMessage("Escolha um plano","Escolha pelo menos um plano antes de continuar.","error");
     } else {
-      this.step++;
+      if (this.step == 3) {
+        if(this.stepModal == 3) this.openModalMessage("Verique os dados","Tudo esta preenchido corretamente. Verifique se há algum erro, se houver, clique na etapa e corrija-o.","success");
+      }
+      if (this.stepModal == this.step) this.step++;
+      if (this.stepModal < 4) this.stepModal++;
     }
   }
 
   openModalMessage(titulo:string,descricao:string,feedback:string) {
     this.dialog.open(ModalMessageComponent,{data:{titulo:titulo,descricao:descricao,feedback:feedback}});
+  }
+
+  irParaEtapa(step: number) {
+    this.step = step;
   }
   
 }
