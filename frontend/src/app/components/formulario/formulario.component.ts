@@ -114,16 +114,16 @@ export class FormularioComponent implements OnInit {
                 this.serviceUsuarioPacote.create(new UsuarioPacote(user_id.id,this.pacoteEscolhido.id))
                 .subscribe(
                   resposta => {
-                    alert("Tudo salvo com sucesso!!");
+                    this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
                   }
                 );
               } else {
-                alert("Tudo salvo com sucesso!");
+                this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
               }
             },
           );
         } else {
-          alert("Erro ao salvar o plano escolhido");
+          this.openModalMessage("Erro inesperado","Erro ao salvar o plano escolhido.","error");
         }
       }
     );
@@ -143,7 +143,7 @@ export class FormularioComponent implements OnInit {
   proximoPasso() {
     if (this.step == 2) {
       if (this.planoEscolhido !== undefined) this.step++;
-      else alert("Escolha pelo menos um plano");
+      else this.openModalMessage("Escolha um plano","Escolha pelo menos um plano antes de continuar.","error");
     } else {
       this.step++;
     }
