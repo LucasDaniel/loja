@@ -23,93 +23,16 @@ import { SendEmail } from 'src/app/model/send-email.model';
 })
 export class FormularioComponent implements OnInit {
 
-  public cep = '32010770';
+  public cep = '';
   public planoEscolhido:Servico | undefined;
   public pacoteEscolhido:Pacote | undefined;
   public step = 1;
   public stepModal = 1;
   public planosDisponiveis:Servico[] = [];
   public pacotesDisponiveis:Pacote[] = [];
-  public formUsuario: FormGroup = this.fb.group({
-    nome: ['Lucas', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(3)
-      ], 
-    }],
-    cpf: ['08292649654', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(11)
-      ], 
-    }],
-    rg: ['15312075', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(8)
-      ], 
-    }],
-    data_nascimento: ['16061989', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(8)
-      ], 
-    }],
-    telefone: ['31993675492', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(11)
-      ], 
-    }],
-    telefone_secundario: [''],
-    email: ['lucas@email.com', {
-      Validators:[
-        Validators.required,
-        Validators.email
-      ], 
-    }],
-    endereco: ['Rua B', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(5)
-      ], 
-    }],
-    bairro: ['Campo Alto', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(2)
-      ], 
-    }],
-    numero: ['228', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(1)
-      ], 
-    }],
-    complemento: [''],
-    referencia: [''],
-    nome_pai: [''],
-    nome_mae: [''],
-    estado_civil: [''],
-    genero: [''],
-    nacionalidade: [''],
-    profissao: [''],
-    vendedor: ['Rafael', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(3)
-      ], 
-    }],
-    dia_vencimento: ['05', {
-      Validators:[
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(2)
-      ], 
-    }],
-    observacao:  ['Teste obs'],
-  });
+  public formUsuario: FormGroup = this.formValidator();
 
+  //Adicione aqui o email para ser enviado após a finalização do cadastro
   private toEmail = 'lucasdanielbeltrame@hotmail.com';
   private valorTotalEscolhido:any = 0;
   private user!: User;
