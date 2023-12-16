@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ModalMessageComponent } from './components/modal-message/modal-message.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -38,9 +39,10 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatCardModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    NgxMaskDirective
   ],
-  providers: [],
+  providers: [provideNgxMask({ /* opções de cfg */ })],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

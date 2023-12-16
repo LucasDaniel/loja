@@ -3,10 +3,10 @@
         <div class="step" *ngIf="step === 1">
             <mat-form-field>
                 <mat-label>CEP</mat-label>
-                <input matInput [(ngModel)]="cep">
+                <input mask="00000-000" matInput [(ngModel)]="cep">
             </mat-form-field>
             <mat-divider></mat-divider>
-            <button mat-raised-button color="primary" (click)="verificaCEP()">Verificar CEP</button>
+            <button mat-raised-button color="primary" (click)="verificaCEP()" [disabled]="this.cep.length < 8">Verificar CEP</button>
         </div>
         <div class="step" *ngIf="step === 2">
             <div class="card-wrapper">

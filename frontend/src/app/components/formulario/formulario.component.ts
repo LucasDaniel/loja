@@ -20,7 +20,7 @@ import { ModalMessageComponent } from '../modal-message/modal-message.component'
 })
 export class FormularioComponent implements OnInit {
 
-  public cep = '32010-770';
+  public cep = '';
   public planoEscolhido:Servico | undefined;
   public pacoteEscolhido:Pacote | undefined;
   public nome = 'aaa';
@@ -66,12 +66,16 @@ export class FormularioComponent implements OnInit {
   }
 
   verificaCEP() {
-    if(this.cepsDisponiveis.indexOf(this.cep) !== -1) {
+    if(this.cepsDisponiveis.indexOf(this.formatCEP()) !== -1) {
       this.openModalMessage("Disponível","Esse CEP esta disponível para nossa super promoção!","success");
       this.proximoPasso();
     } else {
-      this.openModalMessage("Não disponível","CEP "+this.cep+" não disponivel para a super promoção!","error");
+      this.openModalMessage("Não disponível","CEP "+this.formatCEP()+" não disponivel para a super promoção!","error");
     }
+  }
+
+  formatCEP() {
+    return this.cep.substring(0,5)+"-"+this.cep.substring(5);
   }
 
   queroEssePlano(servico:Servico) {
@@ -101,7 +105,7 @@ export class FormularioComponent implements OnInit {
 
   salvar() {
     if (this.nome != '' && this.email != '')
-    this.user = new User(this.nome,this.email,this.cep);
+    this.user = new User(this.nome,this.email,this.formatCEP());
     this.serviceUser.create(this.user)
     .subscribe(
       resposta => {
