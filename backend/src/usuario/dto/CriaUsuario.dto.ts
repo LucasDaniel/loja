@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CriaUsuarioDTO {
   @IsNotEmpty({ message: 'O nome não pode ser vazio' })
@@ -16,6 +22,7 @@ export class CriaUsuarioDTO {
   @IsString({ message: 'Telefone informado é inválido' })
   telefone: string;
 
+  @IsOptional()
   telefone_secundario: string;
 
   @IsEmail(undefined, { message: 'O e-mail informado é inválido' })
@@ -30,30 +37,39 @@ export class CriaUsuarioDTO {
   @IsString({ message: 'O bairro informado é inválido' })
   bairro: string;
 
-  @IsNumber(undefined, { message: 'O numero informado é inválido' })
+  @IsInt({ message: 'O numero informado é inválido' })
   numero: number;
 
+  @IsOptional()
   complemento: string;
 
+  @IsOptional()
   referencia: string;
 
+  @IsOptional()
   nome_pai: string;
 
+  @IsOptional()
   nome_mae: string;
 
+  @IsOptional()
   estado_civil: string;
 
+  @IsOptional()
   genero: string;
 
+  @IsOptional()
   nacionalidade: string;
 
+  @IsOptional()
   profissao: string;
 
   @IsString({ message: 'O vendedor informado é inválido' })
   vendedor: string;
 
-  @IsNumber(undefined, { message: 'O dia do vencimento informado é inválido' })
+  @IsInt({ message: 'O dia do vencimento informado é inválido' })
   dia_vencimento: number;
 
+  @IsOptional()
   observacao: string;
 }

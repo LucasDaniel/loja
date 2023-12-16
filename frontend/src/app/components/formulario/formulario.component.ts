@@ -24,10 +24,8 @@ export class FormularioComponent implements OnInit {
   public cep = '32010770';
   public planoEscolhido:Servico | undefined;
   public pacoteEscolhido:Pacote | undefined;
-  public noome = 'aaa';
-  public email = 'aaa@email.com';
-  public step = 4;
-  public stepModal = 4;
+  public step = 1;
+  public stepModal = 1;
   public planosDisponiveis:Servico[] = [];
   public pacotesDisponiveis:Pacote[] = [];
   public formUsuario: FormGroup = this.fb.group({
@@ -186,41 +184,70 @@ export class FormularioComponent implements OnInit {
   }
 
   salvar() {
-    this.user = new User(this.noome,this.email,this.formatCEP());
+    this.user = new User(
+      this.formUsuario.controls['nome'].value,this.formUsuario.controls['email'].value,
+      this.cep,this.formUsuario.controls['cpf'].value,
+      this.formUsuario.controls['rg'].value, this.formUsuario.controls['data_nascimento'].value,
+      this.formUsuario.controls['telefone'].value, this.formUsuario.controls['telefone_secundario'].value,
+      this.formUsuario.controls['endereco'].value, this.formUsuario.controls['bairro'].value,
+      Number(this.formUsuario.controls['numero'].value) , this.formUsuario.controls['complemento'].value,
+      this.formUsuario.controls['referencia'].value, this.formUsuario.controls['nome_pai'].value,
+      this.formUsuario.controls['nome_mae'].value, this.formUsuario.controls['estado_civil'].value,
+      this.formUsuario.controls['genero'].value, this.formUsuario.controls['nacionalidade'].value,
+      this.formUsuario.controls['profissao'].value, this.formUsuario.controls['vendedor'].value,
+      Number(this.formUsuario.controls['dia_vencimento'].value), this.formUsuario.controls['observacao'].value
+    );
+    this.criarUsuario((user_id: string) => {
+      this.enviaUsuarioServico(user_id);
+    });
+  }
+
+  criarUsuario(callBack: any) {
     this.serviceUser.create(this.user)
     .subscribe(
       resposta => {
         const user_id:any = resposta;
-        if (this.planoEscolhido != undefined) {
-          this.serviceUsuarioServico.create(new UsuarioServico(user_id.id,this.planoEscolhido.id))
-          .subscribe(
-            resposta => {
-              if (this.pacoteEscolhido != undefined) {
-                this.serviceUsuarioPacote.create(new UsuarioPacote(user_id.id,this.pacoteEscolhido.id))
-                .subscribe(
-                  resposta => {
-                    this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
-                  }
-                );
-              } else {
-                this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
-              }
-            },
-          );
-        } else {
-          this.openModalMessage("Erro inesperado","Erro ao salvar o plano escolhido.","error");
-        }
+        callBack(user_id.id);
       }
     );
-    this.reiniciaDados();
+  }
+
+  enviaUsuarioServico(user_id: string) {
+    if (this.planoEscolhido != undefined) {
+      this.serviceUsuarioServico.create(new UsuarioServico(user_id,this.planoEscolhido.id))
+      .subscribe(
+        resposta => {
+          this.enviaUsuarioPacote(user_id);
+        },
+      );
+    } else {
+      this.openModalMessage("Erro inesperado","Erro ao salvar o plano escolhido.","error");
+      this.reiniciaDados();
+    }
+  }
+
+  enviaUsuarioPacote(user_id: string) {
+    if (this.pacoteEscolhido != undefined) {
+      this.serviceUsuarioPacote.create(new UsuarioPacote(user_id,this.pacoteEscolhido.id))
+      .subscribe(
+        resposta => {
+          this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
+          this.reiniciaDados();
+        }
+      );
+    } else {
+      this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
+      this.reiniciaDados();
+    }
   }
 
   reiniciaDados() {
-    this.cep = '32010-770';
+    this.cep = '';
     this.planoEscolhido = undefined;
     this.pacoteEscolhido = undefined;
     this.step = 1;
     this.stepModal = 1;
+    this.formUsuario = this.formValidator();
   }
 
   proximoPasso() {
@@ -245,6 +272,88 @@ export class FormularioComponent implements OnInit {
 
   irParaEtapa(step: number) {
     this.step = step;
+  }
+
+  formValidator() {
+    return this.fb.group({
+      nome: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(3)
+        ], 
+      }],
+      cpf: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(11)
+        ], 
+      }],
+      rg: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(8)
+        ], 
+      }],
+      data_nascimento: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(8)
+        ], 
+      }],
+      telefone: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(11)
+        ], 
+      }],
+      telefone_secundario: [''],
+      email: ['', {
+        Validators:[
+          Validators.required,
+          Validators.email
+        ], 
+      }],
+      endereco: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(5)
+        ], 
+      }],
+      bairro: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(2)
+        ], 
+      }],
+      numero: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(1)
+        ], 
+      }],
+      complemento: [''],
+      referencia: [''],
+      nome_pai: [''],
+      nome_mae: [''],
+      estado_civil: [''],
+      genero: [''],
+      nacionalidade: [''],
+      profissao: [''],
+      vendedor: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(3)
+        ], 
+      }],
+      dia_vencimento: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(2)
+        ], 
+      }],
+      observacao:  [''],
+    });
   }
   
 }
