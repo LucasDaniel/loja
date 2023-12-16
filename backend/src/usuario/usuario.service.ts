@@ -13,5 +13,4 @@ export class UsuarioService {
   async criaUsuario(usuarioEntity: UsuarioEntity) {
     await this.usuarioRepository.save(usuarioEntity);
   }
-
 }

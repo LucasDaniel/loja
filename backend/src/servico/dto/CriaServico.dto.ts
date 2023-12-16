@@ -8,7 +8,7 @@ export class CriaServicoDTO {
   @IsNotEmpty({ message: 'A velocidade não pode ser vazio' })
   velocidade: string;
 
-  @IsNumber(undefined,{ message: 'O valor precisa ser numerico' })
+  @IsNumber(undefined, { message: 'O valor precisa ser numerico' })
   @IsNotEmpty({ message: 'O valor não pode ser vazio' })
   valor: number;
 }
