@@ -9,8 +9,8 @@ export class SendEmailService {
         await this.mailerService.sendMail({
             to: email, 
             from: 'lucasd.beltrame@gmail.com',
-            subject: 'Enviando Email com NestJS',
-            html: `<h3 style="color: red">${mensagem}</h3>`,
+            subject: 'Um novo Cliente',
+            html: `<h3>${mensagem}</h3>`,
         });
     }
 }

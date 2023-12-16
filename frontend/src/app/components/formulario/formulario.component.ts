@@ -13,6 +13,8 @@ import { UsuarioPacoteService } from 'src/app/services/usuario-pacote/usuario-pa
 import { UsuarioServicoService } from 'src/app/services/usuario-servico/usuario-servico.service';
 import { ModalMessageComponent } from '../modal-message/modal-message.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SendEmailService } from 'src/app/services/send-email/send-email.service';
+import { SendEmail } from 'src/app/model/send-email.model';
 
 @Component({
   selector: 'app-formulario',
@@ -108,6 +110,8 @@ export class FormularioComponent implements OnInit {
     observacao:  ['Teste obs'],
   });
 
+  private toEmail = 'lucasdanielbeltrame@hotmail.com';
+  private valorTotalEscolhido:any = 0;
   private user!: User;
   private cepsDisponiveis:string[] = [];
 
@@ -118,6 +122,7 @@ export class FormularioComponent implements OnInit {
     private serviceUser: UserService,
     private serviceUsuarioServico: UsuarioServicoService,
     private serviceUsuarioPacote: UsuarioPacoteService,
+    private serviceSendEmail: SendEmailService,
     private fb: FormBuilder,
     public dialog: MatDialog
   ) {
@@ -156,6 +161,10 @@ export class FormularioComponent implements OnInit {
 
   formatCEP() {
     return this.cep.substring(0,5)+"-"+this.cep.substring(5);
+  }
+
+  formatData(data:string) {
+    return data.substring(0,2)+'/'+data.substring(2,4)+'/'+data.substring(4);
   }
 
   queroEssePlano(servico:Servico) {
@@ -232,13 +241,75 @@ export class FormularioComponent implements OnInit {
       .subscribe(
         resposta => {
           this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
+          this.enviaEmail();
           this.reiniciaDados();
         }
       );
     } else {
       this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
+      this.enviaEmail();
       this.reiniciaDados();
     }
+  }
+
+  enviaEmail() {
+    const sendEmail = new SendEmail(this.toEmail,this.preparaMensagem());
+    this.serviceSendEmail.sendEmail(sendEmail)
+      .subscribe(
+        resposta => {
+          console.log("Email enviado");
+        }
+      );
+  }
+
+  preparaMensagem() {
+
+    const valorPlanoEscolhido = this.planoEscolhido?.nome+" | "+this.planoEscolhido?.velocidade+" | R$ "+this.planoEscolhido?.valor;
+    const valorPacoteEscolhido = this.pacoteEscolhido !== undefined ? this.pacoteEscolhido?.nome+" | R$ "+this.pacoteEscolhido?.valor : '<br>';
+
+    if (this.pacoteEscolhido !== undefined && this.planoEscolhido !== undefined) {
+      this.valorTotalEscolhido = this.planoEscolhido?.valor+this.pacoteEscolhido?.valor;
+    } else if (this.pacoteEscolhido !== undefined) {
+      this.valorTotalEscolhido = this.planoEscolhido?.valor;
+    } else {
+      this.valorTotalEscolhido = 0;
+    }
+
+    return 'Um novo cliente esta a nossa espera<br>'+
+           '-------------------------------------<br>'+
+           'Data e Hora: '+this.getDataAtual()+'<br>'+
+           '-------------------------------------<br>'+
+            this.returnStringMensagem('nome')+
+            this.returnStringMensagem('cpf')+
+            this.returnStringMensagem('rg')+
+            'DATA_NASCIMENTO: '+this.formatData(this.formUsuario.controls['data_nascimento'].value)+'<br>'+
+            this.returnStringMensagem('telefone')+
+            this.returnStringMensagem('telefone_secundario')+
+            'CEP: '+this.cep+'<br>'+
+            this.returnStringMensagem('endereco')+
+            this.returnStringMensagem('bairro')+
+            this.returnStringMensagem('numero')+
+            this.returnStringMensagem('complemento')+
+            this.returnStringMensagem('referencia')+
+            this.returnStringMensagem('nome_pai')+
+            this.returnStringMensagem('nome_mae')+
+            this.returnStringMensagem('estado_civil')+
+            this.returnStringMensagem('genero')+
+            this.returnStringMensagem('nacionalidade')+
+            this.returnStringMensagem('profissao')+
+            this.returnStringMensagem('vendedor')+
+            this.returnStringMensagem('dia_vencimento')+
+            this.returnStringMensagem('observacao')+
+            '-------------------------------------<br>'+
+            'Plano escolhido: '+valorPlanoEscolhido+'<br>'+
+            'Pacote escolhido: '+valorPacoteEscolhido+'<br>'+
+            'Valor total escolhido: R$ '+this.valorTotalEscolhido+'<br>'+
+            '-------------------------------------'+
+            '';
+  }
+
+  returnStringMensagem(arr:string) {
+    return arr.toUpperCase()+': '+this.formUsuario.controls[arr].value+"<br>";
   }
 
   reiniciaDados() {
@@ -272,6 +343,12 @@ export class FormularioComponent implements OnInit {
 
   irParaEtapa(step: number) {
     this.step = step;
+  }
+
+  getDataAtual() {
+    const date = new Date();
+    return date.getDay()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+    
   }
 
   formValidator() {
