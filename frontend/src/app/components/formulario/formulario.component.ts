@@ -108,7 +108,7 @@ export class FormularioComponent implements OnInit {
       ], 
     }],
     observacao:  ['Teste obs'],
- });
+  });
 
   private user!: User;
   private cepsDisponiveis:string[] = [];
@@ -186,7 +186,6 @@ export class FormularioComponent implements OnInit {
   }
 
   salvar() {
-    if (this.noome != '' && this.email != '')
     this.user = new User(this.noome,this.email,this.formatCEP());
     this.serviceUser.create(this.user)
     .subscribe(
@@ -220,8 +219,6 @@ export class FormularioComponent implements OnInit {
     this.cep = '32010-770';
     this.planoEscolhido = undefined;
     this.pacoteEscolhido = undefined;
-    this.noome = 'aaa';
-    this.email = 'aaa@email.com';
     this.step = 1;
     this.stepModal = 1;
   }

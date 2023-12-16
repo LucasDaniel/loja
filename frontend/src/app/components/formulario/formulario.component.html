@@ -305,23 +305,23 @@
                 <div class="d-flex">
                     <mat-form-field class="cadastro-50">
                         <mat-label>Nome</mat-label>
-                        <input matInput formControlName="nome" readonly>
+                        <input matInput formControlName="nome" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-25">
                         <mat-label>CPF</mat-label>
-                        <input mask="000.000.000-00" matInput formControlName="cpf" readonly>
+                        <input mask="000.000.000-00" matInput formControlName="cpf" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-25">
                         <mat-label>RG</mat-label>
-                        <input mask="00.000.000" matInput formControlName="rg" readonly>
+                        <input mask="00.000.000" matInput formControlName="rg" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-33">
                         <mat-label>Data de nascimento</mat-label>
-                        <input mask="00/00/0000" matInput formControlName="data_nascimento" readonly>
+                        <input mask="00/00/0000" matInput formControlName="data_nascimento" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-33">
                         <mat-label>Telefone</mat-label>
-                        <input mask="(00) 0 0000-0000" matInput formControlName="telefone" readonly>
+                        <input mask="(00) 0 0000-0000" matInput formControlName="telefone" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-33">
                         <mat-label>Telefone secundario</mat-label>
@@ -329,21 +329,21 @@
                     </mat-form-field>
                     <mat-form-field class="cadastro-50">
                         <mat-label>Email</mat-label>
-                        <input matInput formControlName="email" readonly>
+                        <input matInput formControlName="email" readonly required>
                     </mat-form-field>
                 </div>
                 <div class="d-flex">
                     <mat-form-field class="cadastro-33">
                         <mat-label>Endereço</mat-label>
-                        <input matInput formControlName="endereco" readonly>
+                        <input matInput formControlName="endereco" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-33">
                         <mat-label>Bairro</mat-label>
-                        <input matInput formControlName="bairro" readonly>
+                        <input matInput formControlName="bairro" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-33">
                         <mat-label>Numero</mat-label>
-                        <input matInput formControlName="numero" readonly>
+                        <input matInput formControlName="numero" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-50">
                         <mat-label>Complemento</mat-label>
@@ -381,11 +381,11 @@
                     </mat-form-field>
                     <mat-form-field class="cadastro-50">
                         <mat-label>Vendedor</mat-label>
-                        <input matInput formControlName="vendedor" readonly>
+                        <input matInput formControlName="vendedor" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-50">
                         <mat-label>Dia do vencimento</mat-label>
-                        <input matInput formControlName="dia_vencimento" readonly>
+                        <input matInput formControlName="dia_vencimento" readonly required>
                     </mat-form-field>
                     <mat-form-field class="cadastro-100">
                         <mat-label>Observação</mat-label>
@@ -426,7 +426,7 @@
                 </mat-card>
             </div>
             <mat-divider></mat-divider>
-            <button class="w-95-p" mat-raised-button color="primary" (click)="salvar()">Salvar</button>
+            <button class="w-95-p" mat-raised-button color="primary" (click)="salvar()" [disabled]="!formUsuario.valid">Salvar</button>
         </div>
     </div>
 </mat-toolbar>
