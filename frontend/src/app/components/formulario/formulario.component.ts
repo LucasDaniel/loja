@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Pacote } from 'src/app/model/pacote.model';
 import { Servico } from 'src/app/model/servico.model';
@@ -15,6 +15,8 @@ import { ModalMessageComponent } from '../modal-message/modal-message.component'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SendEmailService } from 'src/app/services/send-email/send-email.service';
 import { SendEmail } from 'src/app/model/send-email.model';
+import { Dictionary } from 'src/app/dictionary/dicionario.dictionary';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-formulario',
@@ -23,7 +25,8 @@ import { SendEmail } from 'src/app/model/send-email.model';
 })
 export class FormularioComponent implements OnInit {
 
-  public cep = '';
+  public dicionario = new Dictionary();
+
   public planoEscolhido:Servico | undefined;
   public pacoteEscolhido:Pacote | undefined;
   public step = 1;
@@ -50,6 +53,7 @@ export class FormularioComponent implements OnInit {
     public dialog: MatDialog
   ) {
   }
+
   ngOnInit(): void {
     this.serviceCobertura.get()
       .subscribe(
@@ -71,19 +75,21 @@ export class FormularioComponent implements OnInit {
           this.planosDisponiveis = resposta;
         }
       );
+    this.reiniciaDados();
   }
 
   verificaCEP() {
     if(this.cepsDisponiveis.indexOf(this.formatCEP()) !== -1) {
-      if(this.stepModal == 1) this.openModalMessage("Disponível","Esse CEP esta disponível para nossa super promoção!","success");
+      this.openModalMessage("Disponível","Esse CEP esta disponível para nossa super promoção!","success");
       this.proximoPasso();
     } else {
-      if(this.stepModal == 1) this.openModalMessage("Não disponível","CEP "+this.formatCEP()+" não disponivel para a super promoção!","error");
+      this.openModalMessage("Não disponível","CEP "+this.formatCEP()+" não disponivel para a super promoção!","error");
+      this.stepModal = 1;
     }
   }
 
   formatCEP() {
-    return this.cep.substring(0,5)+"-"+this.cep.substring(5);
+    return this.formUsuario.controls['cep'].value.substring(0,5)+"-"+this.formUsuario.controls['cep'].value.substring(5);
   }
 
   formatData(data:string) {
@@ -107,18 +113,21 @@ export class FormularioComponent implements OnInit {
   }
 
   escolheuPlanosPacotes() {
-
-    this.proximoPasso();
+    if (this.planoEscolhido !== undefined) {
+      this.openModalMessage("Coloque seus dados","Preencha o formulario com seus dados, quanto mais dados, melhor.","success");
+      this.proximoPasso();
+    } else if(this.stepModal == 2) this.openModalMessage("Escolha um plano","Escolha pelo menos um plano antes de continuar.","error");
   }
 
   resumoDaCompra() {
+    this.openModalMessage("Verique os dados","Tudo esta preenchido corretamente. Verifique se há algum erro, se houver, clique na etapa e corrija-o.","success");
     this.proximoPasso();
   }
 
   salvar() {
     this.user = new User(
       this.formUsuario.controls['nome'].value,this.formUsuario.controls['email'].value,
-      this.cep,this.formUsuario.controls['cpf'].value,
+      this.formUsuario.controls['cep'].value,this.formUsuario.controls['cpf'].value,
       this.formUsuario.controls['rg'].value, this.formUsuario.controls['data_nascimento'].value,
       this.formUsuario.controls['telefone'].value, this.formUsuario.controls['telefone_secundario'].value,
       this.formUsuario.controls['endereco'].value, this.formUsuario.controls['bairro'].value,
@@ -136,6 +145,11 @@ export class FormularioComponent implements OnInit {
 
   criarUsuario(callBack: any) {
     this.serviceUser.create(this.user)
+    .pipe(
+      catchError(
+        err => this.catchAuthError(err)
+      ),
+    )
     .subscribe(
       resposta => {
         const user_id:any = resposta;
@@ -144,9 +158,19 @@ export class FormularioComponent implements OnInit {
     );
   }
 
+  catchAuthError(error: any): Observable<Response> {
+    this.openModalMessage("Erro ao salvar",error.error.message[0],"error");
+    return throwError(() => error);
+  }
+
   enviaUsuarioServico(user_id: string) {
     if (this.planoEscolhido != undefined) {
       this.serviceUsuarioServico.create(new UsuarioServico(user_id,this.planoEscolhido.id))
+      .pipe(
+        catchError(
+          err => this.catchAuthError(err)
+        ),
+      )
       .subscribe(
         resposta => {
           this.enviaUsuarioPacote(user_id);
@@ -161,6 +185,11 @@ export class FormularioComponent implements OnInit {
   enviaUsuarioPacote(user_id: string) {
     if (this.pacoteEscolhido != undefined) {
       this.serviceUsuarioPacote.create(new UsuarioPacote(user_id,this.pacoteEscolhido.id))
+      .pipe(
+        catchError(
+          err => this.catchAuthError(err)
+        ),
+      )
       .subscribe(
         resposta => {
           this.openModalMessage("Seja muito bem vindo a sempre internet","Você foi cadastrado para nossa promoção, aguarde nosso contato.","success");
@@ -208,7 +237,7 @@ export class FormularioComponent implements OnInit {
             'DATA_NASCIMENTO: '+this.formatData(this.formUsuario.controls['data_nascimento'].value)+'<br>'+
             this.returnStringMensagem('telefone')+
             this.returnStringMensagem('telefone_secundario')+
-            'CEP: '+this.cep+'<br>'+
+            this.returnStringMensagem('cep')+
             this.returnStringMensagem('endereco')+
             this.returnStringMensagem('bairro')+
             this.returnStringMensagem('numero')+
@@ -236,7 +265,6 @@ export class FormularioComponent implements OnInit {
   }
 
   reiniciaDados() {
-    this.cep = '';
     this.planoEscolhido = undefined;
     this.pacoteEscolhido = undefined;
     this.step = 1;
@@ -245,19 +273,8 @@ export class FormularioComponent implements OnInit {
   }
 
   proximoPasso() {
-    if (this.step == 2) {
-      if (this.planoEscolhido !== undefined) {
-        if(this.stepModal == 2) this.openModalMessage("Coloque seus dados","Preencha o formulario com seus dados, quanto mais dados, melhor.","success");
-        if (this.stepModal == this.step) this.step++;
-        if (this.stepModal < 3)this.stepModal++;
-      } else if(this.stepModal == 2) this.openModalMessage("Escolha um plano","Escolha pelo menos um plano antes de continuar.","error");
-    } else {
-      if (this.step == 3) {
-        if(this.stepModal == 3) this.openModalMessage("Verique os dados","Tudo esta preenchido corretamente. Verifique se há algum erro, se houver, clique na etapa e corrija-o.","success");
-      }
-      if (this.stepModal == this.step) this.step++;
-      if (this.stepModal < 4) this.stepModal++;
-    }
+    if (this.step+1 > this.stepModal) this.stepModal++;
+    this.step++;
   }
 
   openModalMessage(titulo:string,descricao:string,feedback:string) {
@@ -271,7 +288,6 @@ export class FormularioComponent implements OnInit {
   getDataAtual() {
     const date = new Date();
     return date.getDay()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
-    
   }
 
   formValidator() {
@@ -310,7 +326,13 @@ export class FormularioComponent implements OnInit {
       email: ['', {
         Validators:[
           Validators.required,
-          Validators.email
+          Validators.email,
+        ], 
+      }],
+      cep: ['', {
+        Validators:[
+          Validators.required,
+          Validators.minLength(9)
         ], 
       }],
       endereco: ['', {
@@ -354,6 +376,22 @@ export class FormularioComponent implements OnInit {
       }],
       observacao:  [''],
     });
+  }
+  
+  verificaInvalido(ctrl:string) {
+    return this.formUsuario.controls[ctrl].getError('required') === undefined && 
+          !this.formUsuario.controls[ctrl].pristine && 
+           this.formUsuario.controls[ctrl].touched;
+  }
+
+  verifcaNaoPreenchido(ctrl:string) {
+    return this.formUsuario.controls[ctrl].getError('required') && 
+          !this.formUsuario.controls[ctrl].pristine && 
+           this.formUsuario.controls[ctrl].touched;
+  }
+
+  verificaPlanoEscolhidoUndefined() {
+    return this.planoEscolhido == undefined;
   }
   
 }

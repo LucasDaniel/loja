@@ -48,36 +48,6 @@ mat-toolbar {
   margin-bottom: 40px;
 }
 
-.cadastro-12 {
-  width: 12.25%;
-  padding-left: 0.5%;
-}
-
-.cadastro-25 {
-  width: 24.5%;
-  padding-left: 1.5%;
-}
-
-.cadastro-33 {
-  width: 32.8%;
-  padding-left: 0.5%;
-}
-
-.cadastro-50 {
-  width: 49.25%;
-  padding-left: 0.5%;
-}
-
-.cadastro-75 {
-  width: 74.5%;
-  padding-left: 0.5%;
-}
-
-.cadastro-100 {
-  width: 99%;
-  padding-left: 0%;
-}
-
 .d-flex {
   display: flex;
   flex-wrap: wrap;
@@ -166,4 +136,68 @@ h4 {
 
 .c-back-green {
   background-color: #CAFFC7;
+}
+
+.cadastro-12 {
+  width: 12.25%;
+  padding-left: 0.5%;
+}
+
+.cadastro-25 {
+  width: 24.5%;
+  padding-left: 1.5%;
+}
+
+.cadastro-33 {
+  width: 32.8%;
+  padding-left: 0.5%;
+}
+
+.cadastro-50 {
+  width: 49.25%;
+  padding-left: 0.5%;
+}
+
+.cadastro-75 {
+  width: 74.5%;
+  padding-left: 0.5%;
+}
+
+.cadastro-100 {
+  width: 99%;
+  padding-left: 0%;
+}
+
+@media only screen and (max-width: 900px) {
+
+  .cadastro-12 {
+    width: 99%;
+    padding-left: 0%;
+  }
+  
+  .cadastro-25 {
+    width: 99%;
+    padding-left: 0%;
+  }
+  
+  .cadastro-33 {
+    width: 99%;
+    padding-left: 0%;
+  }
+  
+  .cadastro-50 {
+    width: 99%;
+    padding-left: 0%;
+  }
+  
+  .cadastro-75 {
+    width: 99%;
+    padding-left: 0%;
+  }
+  
+  .cadastro-100 {
+    width: 99%;
+    padding-left: 0%;
+  }
+
 }

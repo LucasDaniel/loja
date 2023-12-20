@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { DivErrorsComponent } from './components/div-errors/div-errors.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
     HeaderComponent,
     FormularioComponent,
     ModalMessageComponent,
+    DivErrorsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Dictionary } from 'src/app/dictionary/dicionario.dictionary';
 
 @Component({
   selector: 'app-modal-message',
@@ -21,6 +22,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class ModalMessageComponent implements OnInit {
   
+  public dicionario = new Dictionary();
+
   show = false;
 
   public titulo: string = '';
