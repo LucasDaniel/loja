@@ -219,12 +219,10 @@ export class FormularioComponent implements OnInit {
     const valorPlanoEscolhido = this.planoEscolhido?.nome+" | "+this.planoEscolhido?.velocidade+" | R$ "+this.planoEscolhido?.valor;
     const valorPacoteEscolhido = this.pacoteEscolhido !== undefined ? this.pacoteEscolhido?.nome+" | R$ "+this.pacoteEscolhido?.valor : '<br>';
 
-    if (this.pacoteEscolhido !== undefined && this.planoEscolhido !== undefined) {
-      this.valorTotalEscolhido = this.planoEscolhido?.valor+this.pacoteEscolhido?.valor;
-    } else if (this.pacoteEscolhido !== undefined) {
-      this.valorTotalEscolhido = this.planoEscolhido?.valor;
-    } else {
-      this.valorTotalEscolhido = 0;
+    this.valorTotalEscolhido = this.planoEscolhido?.valor;
+
+    if (this.pacoteEscolhido !== undefined) {
+      this.valorTotalEscolhido += this.pacoteEscolhido?.valor;
     }
 
     return 'Um novo cliente esta a nossa espera<br>'+
